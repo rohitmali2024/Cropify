@@ -1,0 +1,1334 @@
+<!doctype html>
+<html lang="{{ t('language') }}" dir="{{ 'rtl' if t('language') == 'ar' else 'ltr' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t('title') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .language-switcher:hover .language-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin: 0.25rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .language-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .language-option.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
+            margin: 2rem auto;
+            max-width: 1000px;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3); }
+            to { text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5); }
+        }
+
+        .header-section p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .form-section {
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .info-card:hover::before {
+            left: 100%;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .info-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .info-card h5 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-card p {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            display: block;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1rem 1rem 1rem 3.5rem;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.25), 0 8px 25px rgba(0, 0, 0, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            z-index: 2;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus + .input-icon {
+            color: #764ba2;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .btn-recommend {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 1.2rem 4rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-recommend::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-recommend:hover::before {
+            left: 100%;
+        }
+
+        .btn-recommend:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-top: 2rem;
+            color: white;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+            animation: slideInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite, glow 2s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            to { text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.6); }
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-text {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] .input-icon {
+            left: auto;
+            right: 1.2rem;
+        }
+
+        [dir="rtl"] .form-control {
+            padding: 1rem 3.5rem 1rem 1rem;
+        }
+
+        [dir="rtl"] .language-dropdown {
+            right: auto;
+            left: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                border-radius: 20px;
+            }
+            
+            .header-section {
+                padding: 2.5rem 1rem;
+            }
+            
+            .header-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-section {
+                padding: 2rem 1rem;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .btn-recommend {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+
+            .language-dropdown {
+                min-width: 150px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2, #f093fb);
+        }
+
+        /* Weather Section Styles */
+        .weather-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .weather-header h4 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-header p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .weather-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .weather-tab {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .weather-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .weather-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .location-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-location {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 15px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-location:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .weather-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .weather-icon img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem;
+        }
+
+        .weather-info h5 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .weather-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .weather-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .weather-item i {
+            color: #667eea;
+            width: 20px;
+        }
+
+        .weather-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-use-weather {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 15px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-use-weather:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+
+        .btn-manual {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            border: none;
+            border-radius: 15px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-manual:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+
+        .weather-loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .weather-error {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .weather-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .weather-tabs {
+                flex-direction: column;
+            }
+            
+            .location-input-group {
+                flex-direction: column;
+            }
+            
+            .weather-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .weather-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-seedling me-2"></i>
+                {{ t('navbar_brand') }}
+            </a>
+            
+            <!-- Language Switcher -->
+            <div class="language-switcher">
+                <div class="language-btn">
+                    <i class="fas fa-globe me-2"></i>{{ t('language') }}
+                    <i class="fas fa-chevron-down ms-2"></i>
+                </div>
+                <div class="language-dropdown">
+                    <div class="language-option {{ 'active' if t('language') == 'en' else '' }}" onclick="changeLanguage('en')">
+                        <i class="fas fa-flag me-2"></i>{{ t('english') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'hi' else '' }}" onclick="changeLanguage('hi')">
+                        <i class="fas fa-flag me-2"></i>{{ t('hindi') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'bn' else '' }}" onclick="changeLanguage('bn')">
+                        <i class="fas fa-flag me-2"></i>{{ t('bengali') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'te' else '' }}" onclick="changeLanguage('te')">
+                        <i class="fas fa-flag me-2"></i>{{ t('telugu') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'mr' else '' }}" onclick="changeLanguage('mr')">
+                        <i class="fas fa-flag me-2"></i>{{ t('marathi') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'ta' else '' }}" onclick="changeLanguage('ta')">
+                        <i class="fas fa-flag me-2"></i>{{ t('tamil') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'gu' else '' }}" onclick="changeLanguage('gu')">
+                        <i class="fas fa-flag me-2"></i>{{ t('gujarati') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'kn' else '' }}" onclick="changeLanguage('kn')">
+                        <i class="fas fa-flag me-2"></i>{{ t('kannada') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'ml' else '' }}" onclick="changeLanguage('ml')">
+                        <i class="fas fa-flag me-2"></i>{{ t('malayalam') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'pa' else '' }}" onclick="changeLanguage('pa')">
+                        <i class="fas fa-flag me-2"></i>{{ t('punjabi') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'or' else '' }}" onclick="changeLanguage('or')">
+                        <i class="fas fa-flag me-2"></i>{{ t('odia') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'as' else '' }}" onclick="changeLanguage('as')">
+                        <i class="fas fa-flag me-2"></i>{{ t('assamese') }}
+                    </div>
+                    <div class="language-option {{ 'active' if t('language') == 'sa' else '' }}" onclick="changeLanguage('sa')">
+                        <i class="fas fa-flag me-2"></i>{{ t('sanskrit') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="main-container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <h1><i class="fas fa-leaf me-3"></i>{{ t('title') }}</h1>
+                <p>{{ t('subtitle') }}</p>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <!-- Info Cards -->
+                <div class="info-cards">
+                    <div class="info-card">
+                        <i class="fas fa-flask"></i>
+                        <h5>{{ t('soil_nutrients') }}</h5>
+                        <p>{{ t('soil_nutrients_desc') }}</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-thermometer-half"></i>
+                        <h5>{{ t('climate_intelligence') }}</h5>
+                        <p>{{ t('climate_intelligence_desc') }}</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-brain"></i>
+                        <h5>{{ t('ai_insights') }}</h5>
+                        <p>{{ t('ai_insights_desc') }}</p>
+                    </div>
+                </div>
+
+                <!-- Weather Data Section -->
+                <div class="weather-section mb-4">
+                    <div class="weather-header">
+                        <h4><i class="fas fa-cloud-sun me-2"></i>{{ t('weather_data') }}</h4>
+                        <p>{{ t('weather_data_desc') }}</p>
+                    </div>
+                    
+                    <div class="weather-options">
+                        <div class="weather-tabs">
+                            <button type="button" class="weather-tab active" id="autoWeatherTab">
+                                <i class="fas fa-location-arrow me-2"></i>{{ t('auto_weather') }}
+                            </button>
+                            <button type="button" class="weather-tab" id="manualWeatherTab">
+                                <i class="fas fa-edit me-2"></i>{{ t('manual_weather') }}
+                            </button>
+                        </div>
+                        
+                        <div class="weather-content" id="autoWeatherContent">
+                            <div class="location-input-group">
+                                <input type="text" id="cityInput" 
+                                       placeholder="{{ t('location_placeholder') }}" 
+                                       class="form-control">
+                                <button type="button" id="getLocationBtn" class="btn btn-location">
+                                    <i class="fas fa-crosshairs me-2"></i>{{ t('get_location') }}
+                                </button>
+                            </div>
+                            <div class="weather-display" id="weatherDisplay" style="display: none;">
+                                <div class="weather-card">
+                                    <div class="weather-icon">
+                                        <img id="weatherIcon" src="" alt="weather">
+                                    </div>
+                                    <div class="weather-info">
+                                        <h5 id="weatherCity">{{ t('current_weather') }}</h5>
+                                        <div class="weather-details">
+                                            <div class="weather-item">
+                                                <i class="fas fa-thermometer-half"></i>
+                                                <span id="weatherTemp"></span>
+                                            </div>
+                                            <div class="weather-item">
+                                                <i class="fas fa-tint"></i>
+                                                <span id="weatherHumidity"></span>
+                                            </div>
+                                            <div class="weather-item">
+                                                <i class="fas fa-cloud-rain"></i>
+                                                <span id="weatherRainfall"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="weather-actions">
+                                    <button type="button" id="useWeatherBtn" class="btn btn-use-weather">
+                                        <i class="fas fa-check me-2"></i>{{ t('use_weather_data') }}
+                                    </button>
+                                    <button type="button" id="enterManuallyBtn" class="btn btn-manual">
+                                        <i class="fas fa-edit me-2"></i>{{ t('enter_manually') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="weather-content" id="manualWeatherContent" style="display: none;">
+                            <p class="text-muted">{{ t('enter_manually') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form action="/predict" method="POST" id="cropForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Nitrogen">
+                                    <i class="fas fa-atom me-2"></i>{{ t('nitrogen') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" id="Nitrogen" name="Nitrogen" 
+                                           placeholder="{{ t('nitrogen_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-leaf input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Phosporus">
+                                    <i class="fas fa-atom me-2"></i>{{ t('phosphorus') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" id="Phosporus" name="Phosporus" 
+                                           placeholder="{{ t('phosphorus_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-leaf input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Potassium">
+                                    <i class="fas fa-atom me-2"></i>{{ t('potassium') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" id="Potassium" name="Potassium" 
+                                           placeholder="{{ t('potassium_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-leaf input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Temperature">
+                                    <i class="fas fa-thermometer-half me-2"></i>{{ t('temperature') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" id="Temperature" name="Temperature" 
+                                           placeholder="{{ t('temperature_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-thermometer-half input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Humidity">
+                                    <i class="fas fa-tint me-2"></i>{{ t('humidity') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" id="Humidity" name="Humidity" 
+                                           placeholder="{{ t('humidity_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-tint input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="pH">
+                                    <i class="fas fa-flask me-2"></i>{{ t('ph_level') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" id="pH" name="pH" 
+                                           placeholder="{{ t('ph_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-flask input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="Rainfall">
+                                    <i class="fas fa-cloud-rain me-2"></i>{{ t('rainfall') }}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" id="Rainfall" name="Rainfall" 
+                                           placeholder="{{ t('rainfall_placeholder') }}" 
+                                           class="form-control" required>
+                                    <i class="fas fa-cloud-rain input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>{{ t('loading_text') }}</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-recommend">
+                            <i class="fas fa-magic me-2"></i>{{ t('get_recommendation') }}
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result Section -->
+                {% if result %}
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="result-title">{{ t('recommended_crop') }}</div>
+                    <div class="result-text">{{ result }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Language change function
+        function changeLanguage(language) {
+            window.location.href = '/change_language/' + language;
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Form submission with loading animation
+        document.getElementById('cropForm').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+        });
+
+        // Enhanced animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+
+            // Add staggered fade-in animation to form elements
+            const formElements = document.querySelectorAll('.form-group');
+            formElements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    element.style.transition = 'all 0.8s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+
+            // Add hover effects to info cards
+            const infoCards = document.querySelectorAll('.info-card');
+            infoCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+
+            // Add input focus effects
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Weather functionality
+            initializeWeatherFeatures();
+        });
+
+        // Weather functionality
+        function initializeWeatherFeatures() {
+            const autoWeatherTab = document.getElementById('autoWeatherTab');
+            const manualWeatherTab = document.getElementById('manualWeatherTab');
+            const autoWeatherContent = document.getElementById('autoWeatherContent');
+            const manualWeatherContent = document.getElementById('manualWeatherContent');
+            const cityInput = document.getElementById('cityInput');
+            const getLocationBtn = document.getElementById('getLocationBtn');
+            const useWeatherBtn = document.getElementById('useWeatherBtn');
+            const enterManuallyBtn = document.getElementById('enterManuallyBtn');
+
+            // Tab switching
+            autoWeatherTab.addEventListener('click', function() {
+                autoWeatherTab.classList.add('active');
+                manualWeatherTab.classList.remove('active');
+                autoWeatherContent.style.display = 'block';
+                manualWeatherContent.style.display = 'none';
+            });
+
+            manualWeatherTab.addEventListener('click', function() {
+                manualWeatherTab.classList.add('active');
+                autoWeatherTab.classList.remove('active');
+                manualWeatherContent.style.display = 'block';
+                autoWeatherContent.style.display = 'none';
+            });
+
+            // Get location button
+            getLocationBtn.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    showWeatherLoading('Getting your location...');
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            fetchWeatherByLocation(lat, lon);
+                        },
+                        function(error) {
+                            showWeatherError('{{ t("location_error") }}');
+                        }
+                    );
+                } else {
+                    showWeatherError('Geolocation is not supported by this browser.');
+                }
+            });
+
+            // City input search
+            cityInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const city = this.value.trim();
+                    if (city) {
+                        showWeatherLoading('Fetching weather data...');
+                        fetchWeatherByCity(city);
+                    }
+                }
+            });
+
+            // Use weather data button
+            useWeatherBtn.addEventListener('click', function() {
+                const weatherDisplay = document.getElementById('weatherDisplay');
+                const weatherData = weatherDisplay.dataset.weather;
+                
+                if (weatherData) {
+                    const data = JSON.parse(weatherData);
+                    document.getElementById('Temperature').value = data.temperature;
+                    document.getElementById('Humidity').value = data.humidity;
+                    document.getElementById('Rainfall').value = data.rainfall;
+                    
+                    showWeatherSuccess('{{ t("weather_success") }}');
+                    
+                    // Switch to manual tab
+                    manualWeatherTab.click();
+                }
+            });
+
+            // Enter manually button
+            enterManuallyBtn.addEventListener('click', function() {
+                manualWeatherTab.click();
+            });
+        }
+
+        function fetchWeatherByCity(city) {
+            console.log('Fetching weather for city:', city);
+            fetch('/get_weather', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ city: city })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Weather response:', data);
+                if (data.success) {
+                    displayWeatherData(data.weather);
+                } else {
+                    console.log('Weather error:', data.error);
+                    showWeatherError(data.error);
+                }
+            })
+            .catch(error => {
+                console.log('Weather fetch error:', error);
+                showWeatherError('Weather data unavailable');
+            });
+        }
+
+        function fetchWeatherByLocation(lat, lon) {
+            fetch('/get_weather_by_location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ lat: lat, lon: lon })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayWeatherData(data.weather);
+                } else {
+                    showWeatherError(data.error);
+                }
+            })
+            .catch(error => {
+                showWeatherError('Weather data unavailable');
+            });
+        }
+
+        function displayWeatherData(weather) {
+            console.log('Displaying weather data:', weather);
+            const weatherDisplay = document.getElementById('weatherDisplay');
+            const weatherIcon = document.getElementById('weatherIcon');
+            const weatherCity = document.getElementById('weatherCity');
+            const weatherTemp = document.getElementById('weatherTemp');
+            const weatherHumidity = document.getElementById('weatherHumidity');
+            const weatherRainfall = document.getElementById('weatherRainfall');
+
+            // Set weather icon
+            weatherIcon.src = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+            
+            // Handle both old and new weather data formats
+            const temp = weather.temperature || weather.temp;
+            const humidity = weather.humidity;
+            const rainfall = weather.rainfall;
+            const description = weather.description || 'System Weather';
+            
+            console.log('Processed weather values:', { temp, humidity, rainfall, description });
+            
+            // Set weather information
+            weatherCity.textContent = weather.city ? `${weather.city}, ${weather.country}` : 'System Weather Data';
+            weatherTemp.textContent = `${temp}°C`;
+            weatherHumidity.textContent = `${humidity}%`;
+            weatherRainfall.textContent = `${rainfall}mm`;
+
+            // Store weather data for form population
+            weatherDisplay.dataset.weather = JSON.stringify({
+                temperature: temp,
+                humidity: humidity,
+                rainfall: rainfall
+            });
+
+            // Show weather display
+            weatherDisplay.style.display = 'block';
+            
+            // Auto-fill form fields
+            document.getElementById('temperature').value = temp;
+            document.getElementById('humidity').value = humidity;
+            document.getElementById('rainfall').value = rainfall;
+            
+            // Remove any existing messages
+            removeWeatherMessages();
+            
+            // Show success message
+            showWeatherSuccess('{{ t("weather_success") }}');
+        }
+
+        function showWeatherLoading(message) {
+            removeWeatherMessages();
+            const weatherContent = document.getElementById('autoWeatherContent');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'weather-loading';
+            loadingDiv.innerHTML = `
+                <div class="spinner"></div>
+                <p>${message}</p>
+            `;
+            weatherContent.appendChild(loadingDiv);
+        }
+
+        function showWeatherError(message) {
+            console.log('Showing weather error:', message);
+            removeWeatherMessages();
+            
+            // Instead of showing error, populate with default values
+            const defaultWeather = {
+                temp: 25,
+                humidity: 60,
+                rainfall: 5,
+                description: 'Default Weather',
+                icon: '01d'
+            };
+            
+            // Auto-fill form fields with default values
+            document.getElementById('temperature').value = defaultWeather.temp;
+            document.getElementById('humidity').value = defaultWeather.humidity;
+            document.getElementById('rainfall').value = defaultWeather.rainfall;
+            
+            // Show success message instead of error
+            showWeatherSuccess('Default weather values applied. You can modify them manually.');
+        }
+
+        function showWeatherSuccess(message) {
+            removeWeatherMessages();
+            const weatherContent = document.getElementById('autoWeatherContent');
+            const successDiv = document.createElement('div');
+            successDiv.className = 'weather-success';
+            successDiv.textContent = message;
+            weatherContent.appendChild(successDiv);
+        }
+
+        function removeWeatherMessages() {
+            const weatherContent = document.getElementById('autoWeatherContent');
+            const messages = weatherContent.querySelectorAll('.weather-loading, .weather-error, .weather-success');
+            messages.forEach(msg => msg.remove());
+        }
+    </script>
+</body>
+</html>

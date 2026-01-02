@@ -1,0 +1,8 @@
+[build]
+  command = "echo 'No build required'"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/api/index.py"
+  status = 200
